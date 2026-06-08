@@ -10,11 +10,12 @@
     "test": "echo 'No tests yet'"
   },
   "dependencies": {
-    "@waelio/ustore": "^2.0.4",
-    "@waelio/utils": "^4.1.7",
     "@waelio/data": "^1.0.8",
     "@waelio/realdb": "^0.1.0",
+    "@waelio/ustore": "^2.0.4",
+    "@waelio/utils": "^4.1.7",
     "next": "^14.2.0",
+    "next-pwa": "^5.6.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"
   },

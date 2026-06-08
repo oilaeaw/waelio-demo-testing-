@@ -11,11 +11,12 @@
     "test": "echo 'No tests yet'"
   },
   "dependencies": {
+    "@vite-pwa/nuxt": "^1.1.1",
+    "@waelio/data": "^1.0.8",
+    "@waelio/messaging": "^2.3.7",
+    "@waelio/realdb": "^0.1.0",
     "@waelio/ustore": "^2.0.4",
     "@waelio/utils": "^4.1.7",
-    "@waelio/data": "^1.0.8",
-    "@waelio/realdb": "^0.1.0",
-    "@waelio/messaging": "^2.3.7",
     "nuxt": "^3.13.0",
     "vue": "^3.4.0"
   }
