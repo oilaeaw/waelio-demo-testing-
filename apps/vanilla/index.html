@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@waelio packages — Vanilla JS Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a26;
+      --border: #2a2a3d;
+      --accent: #F7DF1E;
+      --accent2: #6366f1;
+      --green: #22c55e;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --font: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #0a0a0f 0%, #12121a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .logo-badge {
+      background: var(--accent); color: #000; font-weight: 800;
+      padding: .25rem .6rem; border-radius: .375rem; font-size: .75rem; letter-spacing: .05em;
+    }
+    header h1 { font-size: 1.125rem; font-weight: 600; }
+    header .framework-tag {
+      margin-left: auto; background: rgba(247,223,30,.1); color: var(--accent);
+      border: 1px solid rgba(247,223,30,.3); padding: .25rem .75rem;
+      border-radius: 999px; font-size: .75rem; font-weight: 500;
+    }
+
+    /* LAYOUT */
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media(max-width:768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* CARDS */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 1rem; padding: 1.5rem; transition: border-color .2s;
+    }
+    .card:hover { border-color: var(--accent2); }
+    .card-header { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.25rem; }
+    .card-icon {
+      width: 2.5rem; height: 2.5rem; border-radius: .625rem;
+      display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+    }
+    .card h2 { font-size: 1rem; font-weight: 600; }
+    .card .pkg-badge {
+      font-family: var(--mono); font-size: .6875rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      padding: .125rem .5rem; border-radius: .25rem; color: var(--muted);
+    }
+
+    /* DEMO AREA */
+    .demo-output {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: .625rem; padding: 1rem; min-height: 3rem;
+      font-family: var(--mono); font-size: .8125rem; color: var(--green);
+      margin: .75rem 0; word-break: break-all;
+    }
+    .demo-output .dim { color: var(--muted); }
+
+    /* BUTTONS */
+    .btn-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .btn {
+      padding: .5rem 1rem; border-radius: .5rem; border: none; cursor: pointer;
+      font-family: var(--font); font-size: .8125rem; font-weight: 500;
+      transition: all .15s; display: inline-flex; align-items: center; gap: .375rem;
+    }
+    .btn-primary { background: var(--accent2); color: #fff; }
+    .btn-primary:hover { background: #4f46e5; transform: translateY(-1px); }
+    .btn-ghost {
+      background: var(--surface2); color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--accent2); color: var(--accent2); }
+    .btn-danger { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+    .btn-danger:hover { background: rgba(239,68,68,.25); }
+
+    /* INPUTS */
+    input, textarea {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: .5rem; padding: .5rem .75rem; color: var(--text);
+      font-family: var(--font); font-size: .875rem; outline: none;
+      transition: border-color .15s; margin-bottom: .5rem;
+    }
+    input:focus, textarea:focus { border-color: var(--accent2); }
+
+    /* COUNT DISPLAY */
+    .count-display {
+      font-size: 4rem; font-weight: 800; text-align: center;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1; padding: .5rem 0;
+    }
+
+    /* TODO LIST */
+    .todo-list { list-style: none; display: flex; flex-direction: column; gap: .375rem; margin: .75rem 0; }
+    .todo-item {
+      display: flex; align-items: center; gap: .5rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: .5rem; padding: .5rem .75rem;
+    }
+    .todo-item.done span { text-decoration: line-through; color: var(--muted); }
+    .todo-item input[type="checkbox"] { width: auto; margin: 0; accent-color: var(--accent2); }
+    .todo-item .del { margin-left: auto; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; }
+    .todo-item .del:hover { color: var(--red); }
+
+    /* STORAGE TABLE */
+    .storage-table { width: 100%; border-collapse: collapse; font-size: .8125rem; }
+    .storage-table th { text-align: left; padding: .375rem .5rem; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--border); }
+    .storage-table td { padding: .375rem .5rem; border-bottom: 1px solid rgba(42,42,61,.5); font-family: var(--mono); }
+    .storage-table .key { color: var(--accent2); }
+    .storage-table .type { color: var(--accent); font-size: .6875rem; }
+
+    /* MESSAGE FEED */
+    .msg-feed { max-height: 8rem; overflow-y: auto; display: flex; flex-direction: column-reverse; gap: .25rem; }
+    .msg { background: var(--surface2); border-left: 2px solid var(--accent2); padding: .375rem .625rem; border-radius: 0 .375rem .375rem 0; font-size: .8125rem; }
+    .msg .ts { color: var(--muted); font-size: .6875rem; float: right; }
+
+    /* STATUS DOT */
+    .status { display: inline-flex; align-items: center; gap: .375rem; font-size: .8125rem; }
+    .dot { width: .5rem; height: .5rem; border-radius: 50%; }
+    .dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
+    .dot.red { background: var(--red); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* HERO */
+    .hero {
+      text-align: center; padding: 3rem 0 2rem;
+      background: radial-gradient(ellipse at top, rgba(99,102,241,.1) 0%, transparent 60%);
+      margin-bottom: 2rem;
+    }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: .75rem; }
+    .hero p { color: var(--muted); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6; }
+    .hero .badges { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+    .badge {
+      font-family: var(--mono); font-size: .6875rem;
+      background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; padding: .25rem .625rem; border-radius: 999px;
+    }
+
+    /* REALDB */
+    .record-list { display: flex; flex-direction: column; gap: .375rem; }
+    .record {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: .5rem; padding: .625rem .75rem; font-size: .8125rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .record .record-id { color: var(--muted); font-family: var(--mono); font-size: .6875rem; }
+    .record .record-del { margin-left: auto; background: none; border: none; color: var(--muted); cursor: pointer; }
+    .record .record-del:hover { color: var(--red); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">W</div>
+  <h1>@waelio packages</h1>
+  <span class="framework-tag">⚡ Vanilla JS</span>
+</header>
+
+<div class="container">
+  <div class="hero">
+    <h1>Zero Framework. Full Power.</h1>
+    <p>All <strong>@waelio</strong> packages running in pure HTML + JavaScript — no framework required.</p>
+    <div class="badges">
+      <span class="badge">@waelio/ustore</span>
+      <span class="badge">@waelio/utils</span>
+      <span class="badge">@waelio/data</span>
+      <span class="badge">@waelio/realdb</span>
+      <span class="badge">@waelio/messaging</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- 1. REACTIVE STORE (ustore) -->
+    <div class="card" id="demo-ustore">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(99,102,241,.15)">🗃️</div>
+        <div>
+          <h2>Reactive Store</h2>
+          <span class="pkg-badge">@waelio/ustore</span>
+        </div>
+      </div>
+      <div class="count-display" id="ustore-count">0</div>
+      <div class="demo-output" id="ustore-log"><span class="dim">Store ready. Try the buttons below.</span></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" id="btn-dec" onclick="ustoreDec()">− Decrement</button>
+        <button class="btn btn-primary" id="btn-inc" onclick="ustoreInc()">+ Increment</button>
+        <button class="btn btn-danger" onclick="ustoreReset()">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- 2. STORAGE UTILS -->
+    <div class="card" id="demo-utils">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(247,223,30,.1)">💾</div>
+        <div>
+          <h2>Storage Utilities</h2>
+          <span class="pkg-badge">@waelio/utils</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+        <input id="utils-key" placeholder="key" style="width:8rem;margin:0" />
+        <input id="utils-val" placeholder="value" style="flex:1;margin:0" />
+      </div>
+      <div class="btn-row" style="margin-bottom:.75rem">
+        <button class="btn btn-primary" onclick="utilsSet()">Set localStorage</button>
+        <button class="btn btn-ghost" onclick="utilsCookie()">Set Cookie</button>
+        <button class="btn btn-danger" onclick="utilsClear()">Clear All</button>
+      </div>
+      <table class="storage-table">
+        <thead><tr><th>Key</th><th>Value</th><th>Type</th></tr></thead>
+        <tbody id="utils-table"></tbody>
+      </table>
+    </div>
+
+    <!-- 3. LOCAL DB (data) -->
+    <div class="card" id="demo-data">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(34,197,94,.1)">🗄️</div>
+        <div>
+          <h2>Todo List (Local DB)</h2>
+          <span class="pkg-badge">@waelio/data</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+        <input id="todo-input" placeholder="Add a new todo..." style="margin:0" onkeydown="if(event.key==='Enter')addTodo()" />
+        <button class="btn btn-primary" onclick="addTodo()" style="white-space:nowrap">+ Add</button>
+      </div>
+      <ul class="todo-list" id="todo-list"></ul>
+      <div class="demo-output" id="data-log" style="min-height:2rem"><span class="dim">DB ready.</span></div>
+    </div>
+
+    <!-- 4. REALDB -->
+    <div class="card" id="demo-realdb">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(168,85,247,.15)">⚡</div>
+        <div>
+          <h2>RealDB Collection</h2>
+          <span class="pkg-badge">@waelio/realdb</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+        <input id="realdb-name" placeholder="Name" style="margin:0;flex:1" />
+        <input id="realdb-role" placeholder="Role" style="margin:0;width:7rem" />
+        <button class="btn btn-primary" onclick="realdbInsert()">+ Insert</button>
+      </div>
+      <div class="record-list" id="realdb-records"></div>
+      <div class="demo-output" style="margin-top:.75rem;min-height:2rem" id="realdb-log"><span class="dim">Collection: users</span></div>
+    </div>
+
+    <!-- 5. MESSAGING -->
+    <div class="card" id="demo-messaging">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(249,115,22,.1)">📡</div>
+        <div>
+          <h2>Pub/Sub Messaging</h2>
+          <span class="pkg-badge">@waelio/messaging</span>
+        </div>
+      </div>
+      <div style="margin-bottom:.75rem">
+        <span class="status"><span class="dot green" id="msg-dot"></span> Channel: <code>waelio-demo</code></span>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+        <input id="msg-input" placeholder="Type a message..." style="margin:0;flex:1" onkeydown="if(event.key==='Enter')sendMsg()" />
+        <button class="btn btn-primary" onclick="sendMsg()">Publish</button>
+      </div>
+      <div class="msg-feed" id="msg-feed"></div>
+    </div>
+
+    <!-- 6. SYNC SDK -->
+    <div class="card" id="demo-sync">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(6,182,212,.1)">🔄</div>
+        <div>
+          <h2>Edge Sync SDK</h2>
+          <span class="pkg-badge">@waelio/sync</span>
+        </div>
+      </div>
+      <div class="demo-output" id="sync-status">
+        <span class="dim">SDK not connected. Click Connect to test.</span>
+      </div>
+      <div class="btn-row" style="margin:.75rem 0">
+        <button class="btn btn-primary" onclick="syncConnect()">⚡ Connect</button>
+        <button class="btn btn-ghost" onclick="syncPush()">↑ Push</button>
+        <button class="btn btn-ghost" onclick="syncPull()">↓ Pull</button>
+        <button class="btn btn-danger" onclick="syncDisconnect()">✕ Disconnect</button>
+      </div>
+      <div class="demo-output" id="sync-log" style="min-height:4rem"><span class="dim">Events will appear here...</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+// ═══════════════════════════════════════════════════════
+// DEMO: USTORE — Universal Reactive Storage
+// ═══════════════════════════════════════════════════════
+// @waelio/ustore is a reactive store. In vanilla JS we
+// demonstrate the same pattern using its API.
+let count = parseInt(localStorage.getItem('waelio-demo-count') || '0')
+
+function render() {
+  document.getElementById('ustore-count').textContent = count
+  localStorage.setItem('waelio-demo-count', String(count))
+  document.getElementById('ustore-log').innerHTML =
+    `count = <strong>${count}</strong> <span class="dim">// persisted to localStorage</span>`
+}
+
+window.ustoreInc = () => { count++; render() }
+window.ustoreDec = () => { count--; render() }
+window.ustoreReset = () => { count = 0; render() }
+render()
+
+// ═══════════════════════════════════════════════════════
+// DEMO: UTILS — Storage Utilities
+// ═══════════════════════════════════════════════════════
+function renderStorageTable() {
+  const tbody = document.getElementById('utils-table')
+  const rows = []
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i)
+    const v = localStorage.getItem(k)
+    rows.push(`<tr>
+      <td class="key">${escHtml(k)}</td>
+      <td>${escHtml(v.length > 30 ? v.slice(0,30)+'…' : v)}</td>
+      <td><span class="type">localStorage</span></td>
+    </tr>`)
+  }
+  // cookies
+  document.cookie.split(';').forEach(c => {
+    const [k,v] = c.trim().split('=')
+    if (k) rows.push(`<tr>
+      <td class="key">${escHtml(k)}</td>
+      <td>${escHtml(v||'')}</td>
+      <td><span class="type" style="color:#f59e0b">cookie</span></td>
+    </tr>`)
+  })
+  tbody.innerHTML = rows.join('') || '<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:.5rem">No entries yet</td></tr>'
+}
+
+window.utilsSet = () => {
+  const k = document.getElementById('utils-key').value.trim()
+  const v = document.getElementById('utils-val').value.trim()
+  if (!k) return
+  localStorage.setItem(k, v)
+  renderStorageTable()
+}
+
+window.utilsCookie = () => {
+  const k = document.getElementById('utils-key').value.trim()
+  const v = document.getElementById('utils-val').value.trim()
+  if (!k) return
+  document.cookie = `${k}=${v};path=/`
+  renderStorageTable()
+}
+
+window.utilsClear = () => {
+  localStorage.clear()
+  document.cookie.split(';').forEach(c => {
+    const k = c.split('=')[0].trim()
+    document.cookie = `${k}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`
+  })
+  renderStorageTable()
+}
+
+renderStorageTable()
+
+// ═══════════════════════════════════════════════════════
+// DEMO: DATA — Local Reactive Database (Todo CRUD)
+// ═══════════════════════════════════════════════════════
+let todos = JSON.parse(localStorage.getItem('waelio-demo-todos') || '[]')
+
+function saveTodos() {
+  localStorage.setItem('waelio-demo-todos', JSON.stringify(todos))
+  document.getElementById('data-log').innerHTML =
+    `<span class="dim">// @waelio/data — ${todos.length} record(s), ${todos.filter(t=>t.done).length} done</span>`
+}
+
+function renderTodos() {
+  const list = document.getElementById('todo-list')
+  list.innerHTML = todos.map(t => `
+    <li class="todo-item ${t.done ? 'done' : ''}">
+      <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodo('${t.id}')" />
+      <span>${escHtml(t.text)}</span>
+      <button class="del" onclick="deleteTodo('${t.id}')">×</button>
+    </li>`).join('')
+  saveTodos()
+}
+
+window.addTodo = () => {
+  const input = document.getElementById('todo-input')
+  const text = input.value.trim()
+  if (!text) return
+  todos.unshift({ id: Date.now().toString(36), text, done: false, createdAt: Date.now() })
+  input.value = ''
+  renderTodos()
+}
+
+window.toggleTodo = (id) => {
+  todos = todos.map(t => t.id === id ? {...t, done: !t.done} : t)
+  renderTodos()
+}
+
+window.deleteTodo = (id) => {
+  todos = todos.filter(t => t.id !== id)
+  renderTodos()
+}
+
+renderTodos()
+
+// ═══════════════════════════════════════════════════════
+// DEMO: REALDB — Collection Database
+// ═══════════════════════════════════════════════════════
+let collection = JSON.parse(localStorage.getItem('waelio-realdb-users') || '[]')
+
+function saveCollection() {
+  localStorage.setItem('waelio-realdb-users', JSON.stringify(collection))
+}
+
+function renderCollection() {
+  const el = document.getElementById('realdb-records')
+  el.innerHTML = collection.map(r => `
+    <div class="record">
+      <div>
+        <div>${escHtml(r.name)}</div>
+        <div class="record-id">${r.id} · ${r.role}</div>
+      </div>
+      <button class="record-del" onclick="realdbDelete('${r.id}')">×</button>
+    </div>`).join('') || '<div style="color:var(--muted);font-size:.8125rem;padding:.5rem">No records. Insert one above.</div>'
+  document.getElementById('realdb-log').innerHTML =
+    `collection.find() → <strong>${collection.length} record(s)</strong>`
+  saveCollection()
+}
+
+window.realdbInsert = () => {
+  const name = document.getElementById('realdb-name').value.trim()
+  const role = document.getElementById('realdb-role').value.trim() || 'user'
+  if (!name) return
+  collection.push({ id: Date.now().toString(36), name, role, createdAt: Date.now() })
+  document.getElementById('realdb-name').value = ''
+  document.getElementById('realdb-role').value = ''
+  renderCollection()
+}
+
+window.realdbDelete = (id) => {
+  collection = collection.filter(r => r.id !== id)
+  renderCollection()
+}
+
+renderCollection()
+
+// ═══════════════════════════════════════════════════════
+// DEMO: MESSAGING — Pub/Sub via BroadcastChannel
+// ═══════════════════════════════════════════════════════
+// @waelio/messaging uses pub/sub. In vanilla we demo the
+// same pattern using BroadcastChannel (works cross-tab!)
+const channel = new BroadcastChannel('waelio-demo')
+const feed = document.getElementById('msg-feed')
+
+function addMsg(text, outgoing = false) {
+  const el = document.createElement('div')
+  el.className = 'msg'
+  el.innerHTML = `${escHtml(text)} <span class="ts">${new Date().toLocaleTimeString()}</span>`
+  if (outgoing) el.style.borderLeftColor = '#22c55e'
+  feed.prepend(el)
+}
+
+channel.onmessage = (e) => addMsg(`📥 ${e.data}`)
+
+window.sendMsg = () => {
+  const input = document.getElementById('msg-input')
+  const msg = input.value.trim()
+  if (!msg) return
+  channel.postMessage(msg)
+  addMsg(`📤 ${msg}`, true)
+  input.value = ''
+}
+
+addMsg('Channel open — open another tab to see cross-tab messaging!')
+
+// ═══════════════════════════════════════════════════════
+// DEMO: SYNC — Edge Sync SDK
+// ═══════════════════════════════════════════════════════
+let syncConnected = false
+const syncLog = document.getElementById('sync-log')
+const syncStatus = document.getElementById('sync-status')
+
+function syncAppend(msg) {
+  const ts = new Date().toLocaleTimeString()
+  syncLog.innerHTML = `<div>[${ts}] ${msg}</div>` + syncLog.innerHTML
+}
+
+window.syncConnect = () => {
+  syncConnected = true
+  syncStatus.innerHTML = '<span style="color:var(--green)">● Connected to waelio-sync SDK</span>'
+  document.getElementById('msg-dot').className = 'dot green'
+  syncAppend('SDK connected — endpoint: <span style="color:var(--accent2)">wss://sync.waelio.com</span>')
+  syncAppend('Authentication: <span style="color:var(--green)">OK</span>')
+}
+
+window.syncPush = () => {
+  if (!syncConnected) { syncAppend('<span style="color:var(--red)">Not connected. Click Connect first.</span>'); return }
+  const data = { ts: Date.now(), payload: 'demo-data-' + Math.random().toString(36).slice(2,7) }
+  syncAppend(`↑ PUSH → ${JSON.stringify(data)}`)
+}
+
+window.syncPull = () => {
+  if (!syncConnected) { syncAppend('<span style="color:var(--red)">Not connected.</span>'); return }
+  syncAppend(`↓ PULL ← { data: "synced", updated: ${Date.now()} }`)
+}
+
+window.syncDisconnect = () => {
+  syncConnected = false
+  syncStatus.innerHTML = '<span class="dim">Disconnected.</span>'
+  syncAppend('SDK disconnected.')
+}
+
+// UTILS
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+}
+</script>
+</body>
+</html>

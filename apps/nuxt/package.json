@@ -1,0 +1,22 @@
+{
+  "name": "@waelio-demo/nuxt",
+  "version": "1.0.0",
+  "description": "Waelio packages demo — Nuxt 3",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev --port 3000",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "generate": "nuxt generate",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "@waelio/ustore": "^2.0.4",
+    "@waelio/utils": "^4.1.7",
+    "@waelio/data": "^1.0.8",
+    "@waelio/realdb": "^0.1.0",
+    "@waelio/messaging": "^2.3.7",
+    "nuxt": "^3.13.0",
+    "vue": "^3.4.0"
+  }
+}

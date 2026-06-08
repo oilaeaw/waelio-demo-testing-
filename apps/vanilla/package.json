@@ -1,0 +1,21 @@
+{
+  "name": "@waelio-demo/vanilla",
+  "version": "1.0.0",
+  "description": "Waelio packages demo — Vanilla HTML/JS (zero framework)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve . --port 4000 --no-clipboard",
+    "build": "echo 'Vanilla — no build step needed'",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "@waelio/ustore": "^2.0.4",
+    "@waelio/utils": "^4.1.7",
+    "@waelio/data": "^1.0.8",
+    "@waelio/realdb": "^0.1.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

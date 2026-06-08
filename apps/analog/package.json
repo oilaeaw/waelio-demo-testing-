@@ -1,0 +1,17 @@
+{
+  "name": "@waelio-demo/analog",
+  "version": "1.0.0",
+  "description": "Waelio packages demo — analog (coming soon)",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'analog demo coming in Phase 2/3'",
+    "build": "echo 'Not yet implemented'",
+    "test": "echo 'Not yet implemented'"
+  },
+  "dependencies": {
+    "@waelio/ustore": "^2.0.4",
+    "@waelio/utils": "^4.1.7",
+    "@waelio/data": "^1.0.8",
+    "@waelio/realdb": "^0.1.0"
+  }
+}

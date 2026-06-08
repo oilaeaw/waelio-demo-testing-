@@ -1,0 +1,27 @@
+{
+  "name": "@waelio-demo/next",
+  "version": "1.0.0",
+  "description": "Waelio packages demo — Next.js 14",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "@waelio/ustore": "^2.0.4",
+    "@waelio/utils": "^4.1.7",
+    "@waelio/data": "^1.0.8",
+    "@waelio/realdb": "^0.1.0",
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "waelio-demo-testing",
+  "version": "1.0.0",
+  "description": "Full-coverage demo & testing monorepo for all @waelio packages across 15+ JavaScript frameworks",
+  "private": true,
+  "author": "Waelio <waelio@waelio.com> (https://waelio.com)",
+  "license": "MIT",
+  "workspaces": [],
+  "scripts": {
+    "dev:nuxt": "npm run dev --workspace=apps/nuxt",
+    "dev:vite-vue": "npm run dev --workspace=apps/vite-vue",
+    "dev:vite-react": "npm run dev --workspace=apps/vite-react",
+    "dev:quasar": "npm run dev --workspace=apps/quasar",
+    "dev:next": "npm run dev --workspace=apps/next",
+    "dev:vanilla": "npm run dev --workspace=apps/vanilla",
+    "dev:angular": "npm run dev --workspace=apps/angular",
+    "dev:sveltekit": "npm run dev --workspace=apps/sveltekit",
+    "dev:solid": "npm run dev --workspace=apps/solid",
+    "dev:remix": "npm run dev --workspace=apps/remix",
+    "dev:astro": "npm run dev --workspace=apps/astro",
+    "dev:qwik": "npm run dev --workspace=apps/qwik",
+    "dev:analog": "npm run dev --workspace=apps/analog",
+    "dev:lit": "npm run dev --workspace=apps/lit",
+    "dev:ember": "npm run dev --workspace=apps/ember",
+    "build:all": "npm run build --workspaces --if-present",
+    "test:all": "npm run test --workspaces --if-present",
+    "list": "echo 'Apps: nuxt | vite-vue | vite-react | quasar | next | vanilla | angular | sveltekit | solid | remix | astro | qwik | analog | lit | ember'"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

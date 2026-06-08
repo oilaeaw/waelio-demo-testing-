@@ -1,0 +1,26 @@
+{
+  "name": "@waelio-demo/quasar",
+  "version": "1.0.0",
+  "description": "Waelio packages demo — Quasar 2 (with quasar-app-extension-waelio)",
+  "private": true,
+  "scripts": {
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.16.0",
+    "@waelio/ustore": "^2.0.4",
+    "@waelio/utils": "^4.1.7",
+    "@waelio/data": "^1.0.8",
+    "@waelio/realdb": "^0.1.0",
+    "quasar": "^2.16.0",
+    "quasar-app-extension-waelio": "^0.2.1",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@quasar/app-vite": "^2.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.2.0"
+  }
+}

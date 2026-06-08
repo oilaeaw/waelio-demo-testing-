@@ -1,0 +1,82 @@
+name: CI — All Framework Demos
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  vanilla:
+    name: Vanilla JS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: echo "Vanilla — no build step needed ✓"
+
+  nuxt:
+    name: Nuxt 3
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm install
+        working-directory: apps/nuxt
+      - run: npm run build
+        working-directory: apps/nuxt
+
+  vite-vue:
+    name: Vite + Vue 3
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm install
+        working-directory: apps/vite-vue
+      - run: npm run build
+        working-directory: apps/vite-vue
+
+  vite-react:
+    name: Vite + React 18
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm install
+        working-directory: apps/vite-react
+      - run: npm run build
+        working-directory: apps/vite-react
+
+  next:
+    name: Next.js 14
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm install
+        working-directory: apps/next
+      - run: npm run build
+        working-directory: apps/next
+
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [vanilla, nuxt, vite-vue, vite-react, next]
+    if: always()
+    steps:
+      - name: Report
+        run: |
+          echo "## @waelio Package Compatibility Report" >> $GITHUB_STEP_SUMMARY
+          echo "| Framework | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Vanilla JS | ${{ needs.vanilla.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Nuxt 3 | ${{ needs.nuxt.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Vite + Vue 3 | ${{ needs.vite-vue.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Vite + React 18 | ${{ needs.vite-react.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Next.js 14 | ${{ needs.next.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
