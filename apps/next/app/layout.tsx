@@ -2,7 +2,10 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: '@waelio packages — Next.js 14 Demo',
-  description: 'Cross-framework demo of all @waelio npm packages',
+  description: 'Cross-framework demo of all @waelio npm packages — installable PWA',
+  themeColor: '#000000',
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'waelio-next' },
+  manifest: '/manifest.json',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
