@@ -544,6 +544,124 @@ window.syncDisconnect = () => {
 function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
 }
+
+// ═══════════════════════════════════════════════════════
+// PWA — Service Worker Registration + Install Prompt
+// ═══════════════════════════════════════════════════════
+let deferredInstallPrompt = null
+
+// Register SW
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js')
+      console.log('[PWA] SW registered:', reg.scope)
+      // Show update banner if new SW waiting
+      reg.addEventListener('updatefound', () => {
+        const newSW = reg.installing
+        newSW?.addEventListener('statechange', () => {
+          if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateBanner()
+          }
+        })
+      })
+    } catch (err) {
+      console.warn('[PWA] SW registration failed:', err)
+    }
+  })
+}
+
+// Capture install prompt
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault()
+  deferredInstallPrompt = e
+  showInstallBanner()
+})
+
+window.addEventListener('appinstalled', () => {
+  hideBanner('pwa-install-banner')
+  addMsg('📲 App installed to homescreen!')
+})
+
+function showInstallBanner() {
+  const b = document.getElementById('pwa-install-banner')
+  if (b) { b.style.transform = 'translateY(0)'; b.style.opacity = '1' }
+}
+
+function showUpdateBanner() {
+  const b = document.getElementById('pwa-update-banner')
+  if (b) { b.style.transform = 'translateY(0)'; b.style.opacity = '1' }
+}
+
+function hideBanner(id) {
+  const b = document.getElementById(id)
+  if (b) { b.style.transform = 'translateY(100%)'; b.style.opacity = '0' }
+}
+
+window.installPWA = async () => {
+  if (!deferredInstallPrompt) return
+  deferredInstallPrompt.prompt()
+  const { outcome } = await deferredInstallPrompt.userChoice
+  deferredInstallPrompt = null
+  hideBanner('pwa-install-banner')
+  addMsg(outcome === 'accepted' ? '✅ Install accepted!' : '❌ Install dismissed.')
+}
+
+window.updatePWA = () => {
+  navigator.serviceWorker.getRegistration().then(reg => {
+    reg?.waiting?.postMessage({ type: 'SKIP_WAITING' })
+    window.location.reload()
+  })
+}
+
+// Online/offline indicator
+const offlineBadge = document.getElementById('offline-badge')
+window.addEventListener('offline', () => { if (offlineBadge) offlineBadge.style.display = 'flex' })
+window.addEventListener('online',  () => { if (offlineBadge) offlineBadge.style.display = 'none' })
+if (!navigator.onLine && offlineBadge) offlineBadge.style.display = 'flex'
 </script>
+
+<!-- PWA Install Banner -->
+<div id="pwa-install-banner" style="
+  position:fixed; bottom:0; left:0; right:0; z-index:999;
+  background:linear-gradient(135deg,#12121a,#1a1a26); border-top:1px solid #2a2a3d;
+  padding:1rem 2rem; display:flex; align-items:center; gap:1rem;
+  transform:translateY(100%); opacity:0; transition:all .4s cubic-bezier(.16,1,.3,1);
+">
+  <img src="/icons/icon-192.png" style="width:2.5rem;height:2.5rem;border-radius:.5rem" />
+  <div style="flex:1">
+    <div style="font-weight:600;font-size:.9375rem">Install @waelio Demo</div>
+    <div style="font-size:.8125rem;color:#64748b">Add to homescreen — works offline</div>
+  </div>
+  <button onclick="installPWA()" style="background:#6366f1;color:#fff;border:none;padding:.5rem 1.25rem;border-radius:.5rem;cursor:pointer;font-weight:500;font-family:'Inter',sans-serif">Install</button>
+  <button onclick="hideBanner('pwa-install-banner')" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:1.25rem">×</button>
+</div>
+
+<!-- PWA Update Banner -->
+<div id="pwa-update-banner" style="
+  position:fixed; bottom:0; left:0; right:0; z-index:999;
+  background:linear-gradient(135deg,#0a2a1a,#12121a); border-top:1px solid #22c55e44;
+  padding:1rem 2rem; display:flex; align-items:center; gap:1rem;
+  transform:translateY(100%); opacity:0; transition:all .4s cubic-bezier(.16,1,.3,1);
+">
+  <span style="font-size:1.25rem">🔄</span>
+  <div style="flex:1">
+    <div style="font-weight:600;font-size:.9375rem">Update available</div>
+    <div style="font-size:.8125rem;color:#64748b">A new version is ready to install</div>
+  </div>
+  <button onclick="updatePWA()" style="background:#22c55e;color:#000;border:none;padding:.5rem 1.25rem;border-radius:.5rem;cursor:pointer;font-weight:500;font-family:'Inter',sans-serif">Update</button>
+  <button onclick="hideBanner('pwa-update-banner')" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:1.25rem">×</button>
+</div>
+
+<!-- Offline indicator -->
+<div id="offline-badge" style="
+  display:none; position:fixed; top:1rem; right:1rem; z-index:999;
+  background:#1a1a26; border:1px solid #ef444444; border-radius:.5rem;
+  padding:.375rem .75rem; align-items:center; gap:.375rem; font-size:.8125rem;
+">
+  <span style="width:.5rem;height:.5rem;border-radius:50%;background:#ef4444;display:inline-block"></span>
+  Offline — cached data available
+</div>
+
 </body>
 </html>
