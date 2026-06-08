@@ -53,14 +53,14 @@ export default function Home() {
       <div style={s.grid}>
         {/* ustore */}
         <div style={s.card}>
-          <h2 style={hdr}>🗃️ Reactive Store <pkg>@waelio/ustore</pkg></h2>
+          <h2 style={hdr}>🗃️ Reactive Store <Pkg>@waelio/ustore</Pkg></h2>
           <div style={{ fontSize:'4rem', fontWeight:800, textAlign:'center', background:'linear-gradient(135deg,#000 0%,#6366f1 100%)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', padding:'.5rem 0' }}>{count}</div>
           <div style={s.out}>count = {count}</div>
           <Row><B o={()=>setCount(count-1)} v="ghost">− Dec</B><B o={()=>setCount(count+1)} v="primary">+ Inc</B><B o={()=>setCount(0)} v="danger">↺ Reset</B></Row>
         </div>
         {/* utils */}
         <div style={s.card}>
-          <h2 style={hdr}>💾 Storage Utils <pkg>@waelio/utils</pkg></h2>
+          <h2 style={hdr}>💾 Storage Utils <Pkg>@waelio/utils</Pkg></h2>
           <input style={s.input} value={sKey} onChange={e=>setSKey(e.target.value)} placeholder="key" />
           <input style={s.input} value={sVal} onChange={e=>setSVal(e.target.value)} placeholder="value" />
           <Row><B o={()=>{localStorage.setItem(sKey,sVal);setSLog(`Set "${sKey}" ✓`)}} v="primary">Set localStorage</B><B o={()=>{localStorage.clear();setSLog('Cleared.')}} v="danger">Clear</B></Row>
@@ -68,7 +68,7 @@ export default function Home() {
         </div>
         {/* data */}
         <div style={s.card}>
-          <h2 style={hdr}>🗄️ Local Database <pkg>@waelio/data</pkg></h2>
+          <h2 style={hdr}>🗄️ Local Database <Pkg>@waelio/data</Pkg></h2>
           <div style={{display:'flex',gap:'.5rem'}}>
             <input style={{...s.input,marginBottom:0}} value={tText} onChange={e=>setTText(e.target.value)} placeholder="New todo..." onKeyDown={e=>e.key==='Enter'&&tText.trim()&&(setTodos([{id:Date.now().toString(36),text:tText,done:false},...todos]),setTText(''))} />
             <B o={()=>tText.trim()&&(setTodos([{id:Date.now().toString(36),text:tText,done:false},...todos]),setTText(''))} v="primary">+</B>
@@ -84,7 +84,7 @@ export default function Home() {
         </div>
         {/* realdb */}
         <div style={s.card}>
-          <h2 style={hdr}>⚡ RealDB Collection <pkg>@waelio/realdb</pkg></h2>
+          <h2 style={hdr}>⚡ RealDB Collection <Pkg>@waelio/realdb</Pkg></h2>
           <div style={{display:'flex',gap:'.5rem'}}>
             <input style={{...s.input,marginBottom:0}} value={rName} onChange={e=>setRName(e.target.value)} placeholder="Name" />
             <input style={{...s.input,marginBottom:0,width:'7rem'}} value={rRole} onChange={e=>setRRole(e.target.value)} placeholder="Role" />
@@ -100,7 +100,7 @@ export default function Home() {
         </div>
         {/* messaging */}
         <div style={s.card}>
-          <h2 style={hdr}>📡 Pub/Sub Messaging <pkg>@waelio/messaging</pkg></h2>
+          <h2 style={hdr}>📡 Pub/Sub Messaging <Pkg>@waelio/messaging</Pkg></h2>
           <div style={{display:'flex',gap:'.5rem',margin:'.5rem 0'}}>
             <input style={{...s.input,marginBottom:0}} value={mText} onChange={e=>setMText(e.target.value)} placeholder="Publish..." onKeyDown={e=>{if(e.key==='Enter'&&mText.trim()){bc.current?.postMessage(mText);setMsgs(p=>[{id:Date.now().toString(36),text:`📤 ${mText}`,ts:ts()},...p]);setMText('')}}} />
             <B o={()=>{if(!mText.trim())return;bc.current?.postMessage(mText);setMsgs(p=>[{id:Date.now().toString(36),text:`📤 ${mText}`,ts:ts()},...p]);setMText('')}} v="primary">Send</B>
@@ -111,7 +111,7 @@ export default function Home() {
         </div>
         {/* sync */}
         <div style={s.card}>
-          <h2 style={hdr}>🔄 Edge Sync SDK <pkg>@waelio/sync</pkg></h2>
+          <h2 style={hdr}>🔄 Edge Sync SDK <Pkg>@waelio/sync</Pkg></h2>
           <div style={s.out}>{syncSt}</div>
           <Row>
             <B o={()=>{setConnected(true);setSyncSt('● Connected');setSyncLog(p=>[`[${ts()}] Connected`,...p])}} v="primary">Connect</B>
@@ -127,7 +127,7 @@ export default function Home() {
 }
 
 const hdr: React.CSSProperties = { fontSize:'1rem', fontWeight:600, marginBottom:'1.25rem', display:'flex', alignItems:'center', gap:'.5rem', flexWrap:'wrap' }
-function pkg({ children }: { children: React.ReactNode }) {
+function Pkg({ children }: { children: React.ReactNode }) {
   return <span style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:'.6875rem', background:'#1a1a26', border:'1px solid #2a2a3d', padding:'.125rem .5rem', borderRadius:'.25rem', color:'#64748b', fontWeight:400 }}>{children}</span>
 }
 function Row({ children }: { children: React.ReactNode }) {
